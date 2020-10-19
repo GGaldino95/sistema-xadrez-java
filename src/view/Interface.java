@@ -1,12 +1,13 @@
 package view;
 
-import boardgame.Board;
+import chess.ChessMatch;
 
 public class Interface {
 
 	public static void main(String[] args) {
 		
-		Board board = new Board(8, 8); // 8 rows and 8 columns.
+		ChessMatch chessMatch = new ChessMatch();
+		UI.printBoard(chessMatch.getPieces());
 
 	}
 
