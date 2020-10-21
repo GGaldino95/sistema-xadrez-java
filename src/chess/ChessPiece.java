@@ -8,7 +8,7 @@ import boardgame.Piece;
  * to be altered in any way. */
 /** ======================================== **/
 
-public class ChessPiece extends Piece {
+public abstract class ChessPiece extends Piece {
 
 	// Attributes
 	private Color color;

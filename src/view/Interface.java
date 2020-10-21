@@ -31,10 +31,10 @@ public class Interface {
 				ChessPiece capturedPiece = chessMatch.performChessMove(source, target);
 			} catch (ChessException e) {
 				System.out.println(e.getMessage());
-				sc.nextLine(); // Makes the program wait for and Enter to continue.
+				sc.nextLine(); // Makes the program wait for an Enter to continue.
 			} catch (InputMismatchException e) {
 				System.out.println(e.getMessage());
-				sc.nextLine(); // Makes the program wait for and Enter to continue.
+				sc.nextLine(); // Makes the program wait for an Enter to continue.
 			}
 		}
 	}
