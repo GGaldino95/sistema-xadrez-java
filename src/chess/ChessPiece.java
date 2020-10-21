@@ -2,6 +2,7 @@ package chess;
 
 import boardgame.Board;
 import boardgame.Piece;
+import boardgame.Position;
 
 /** =============== COMMENTS =============== **/
 /* 1.1: We won't declare the setter 'setColor()' because we don't want the color of the piece
@@ -22,5 +23,11 @@ public abstract class ChessPiece extends Piece {
 	// Getters e Setters
 	public Color getColor() { // 1.1*
 		return color;
+	}
+	
+	// Methods
+	protected boolean isThereOpponentPiece(Position position) {
+		ChessPiece p = (ChessPiece)getBoard().piece(position); // Downcasting
+		return p != null && p.getColor() != color;
 	}
 }
