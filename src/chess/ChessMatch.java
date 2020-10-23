@@ -9,7 +9,13 @@ import chess.pieces.Rook;
 /** =============== COMMENTS =============== **/
 /* 1.1: The Class that needs to know the dimensions of the 'Board' is 'ChessMatch'. */
 
-/* 1.2: 'getPieces' is a ChessPiece[][] type instead of Piece[][] (located on 'Board' class)
+/* 1.2: We won't declare the setter 'setTurn()' because we don't want the the turn to be 
+ * altered in any way. */
+
+/* 1.3: We won't declare the setter 'setCurrentPlayer()' because we don't want the current 
+ * player to be altered in any way. */
+
+/* 1.4: 'getPieces' is a ChessPiece[][] type instead of Piece[][] (located on 'Board' class)
  * because we're on the Chess layer, and the Interface will only be able to read the
  * ChessPiece[][] type. (Layer-programming) */
 /** ======================================== **/
@@ -17,16 +23,29 @@ import chess.pieces.Rook;
 public class ChessMatch {
 
 	// Attributes
+	private int turn;
+	private Color currentPlayer;
 	private Board board;
 	
 	// Constructor
 	public ChessMatch() { // 1.1*
 		board = new Board(8, 8);
+		turn = 1;
+		currentPlayer = Color.WHITE;
 		initialSetup();
 	}
 	
+	// Getters and Setters
+	public int getTurn() { // 1.2*
+		return turn;
+	}
+	
+	public Color getCurrentPlayer() { // 1.3*
+		return currentPlayer;
+	}
+	
 	// Methods
-	public ChessPiece[][] getPieces() { // 1.2*
+	public ChessPiece[][] getPieces() { // 1.4*
 		ChessPiece[][] mat = new ChessPiece[board.getRows()][board.getColumns()];
 		for (int i = 0; i < board.getRows(); i++) {
 			for (int j = 0; j < board.getColumns(); j++) {
@@ -49,6 +68,7 @@ public class ChessMatch {
 		validateSourcePosition(source);
 		validateTargetPosition(source, target);
 		Piece capturedPiece = makeMove(source, target);
+		nextTurn();
 		return (ChessPiece)capturedPiece; // Downcasting
 	}
 	
@@ -63,6 +83,9 @@ public class ChessMatch {
 		if (!board.thereIsAPiece(position))
 			throw new ChessException("There is no piece on source position");
 		
+		if (currentPlayer != ((ChessPiece)board.piece(position)).getColor()) // Downcasting
+			throw new ChessException("The chosen piece is not yours");
+		
 		if (!board.piece(position).isThereAnyPossibleMove())
 			throw new ChessException("There is no possible moves for the selected piece");
 	}
@@ -71,6 +94,11 @@ public class ChessMatch {
 		 if (!board.piece(source).possibleMove(target))
 			 throw new ChessException("The chosen piece can't move to target position");
 			 
+	}
+	
+	private void nextTurn() {
+		turn++;
+		currentPlayer = (currentPlayer == Color.WHITE) ? Color.BLACK : Color.WHITE;
 	}
 	
 	private void placeNewPiece(char column, int row, ChessPiece piece) {
