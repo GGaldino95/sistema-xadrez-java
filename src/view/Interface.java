@@ -18,7 +18,7 @@ public class Interface {
 		ChessMatch chessMatch = new ChessMatch();
 		List<ChessPiece> captured = new ArrayList<>();
 
-		while (true) {
+		while (!chessMatch.getCheckMate()) {
 			try {
 				UI.clearScreen();
 				UI.printMatch(chessMatch, captured);
@@ -48,6 +48,9 @@ public class Interface {
 				sc.nextLine(); // Makes the program wait for an Enter to continue.
 			}
 		}
+		
+		UI.clearScreen();
+		UI.printMatch(chessMatch, captured);
 	}
 
 }
