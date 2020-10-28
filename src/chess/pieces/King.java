@@ -17,7 +17,6 @@ public class King extends ChessPiece {
 	}
 
 	// Methods
-
 	private boolean canMove(Position position) {
 		ChessPiece p = (ChessPiece) getBoard().piece(position); // Downcasting
 		return p == null || p.getColor() != getColor();
@@ -26,7 +25,7 @@ public class King extends ChessPiece {
 	@Override
 	public boolean[][] possibleMoves() {
 		boolean[][] mat = new boolean[getBoard().getRows()][getBoard().getColumns()]; // 1.1*
-		Position p = new Position(0, 0);
+		Position p = new Position(0, 0); // aux
 
 		// Up
 		p.setValues(position.getRow() - 1, position.getColumn());
