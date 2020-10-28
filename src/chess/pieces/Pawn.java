@@ -23,47 +23,47 @@ public class Pawn extends ChessPiece {
 		Position p = new Position(0, 0); // aux
 
 		if (getColor() == Color.WHITE) { // WHITE PIECE
-			// Foward 1 block
+			// North 1 block
 			p.setValues(position.getRow() - 1, position.getColumn());
 			if (getBoard().positionExists(p) && !getBoard().thereIsAPiece(p))
 				mat[p.getRow()][p.getColumn()] = true;
 
-			// Foward 2 blocks
+			// North 2 blocks
 			p.setValues(position.getRow() - 2, position.getColumn());
 			Position p2 = new Position(position.getRow() - 1, position.getColumn());
 			if (getBoard().positionExists(p) && !getBoard().thereIsAPiece(p) && getBoard().positionExists(p2)
 					&& !getBoard().thereIsAPiece(p2) && getMoveCount() == 0)
 				mat[p.getRow()][p.getColumn()] = true;
 
-			// Capture enemy on the left diagonal
+			// Capture enemy on Northwest
 			p.setValues(position.getRow() - 1, position.getColumn() - 1);
 			if (getBoard().positionExists(p) && isThereOpponentPiece(p))
 				mat[p.getRow()][p.getColumn()] = true;
 
-			// Capture enemy on the right diagonal
+			// Capture enemy on Northeast
 			p.setValues(position.getRow() - 1, position.getColumn() + 1);
 			if (getBoard().positionExists(p) && isThereOpponentPiece(p))
 				mat[p.getRow()][p.getColumn()] = true;
 
 		} else { // BLACK PIECE
-			// Foward 1 block
+			// South 1 block
 			p.setValues(position.getRow() + 1, position.getColumn());
 			if (getBoard().positionExists(p) && !getBoard().thereIsAPiece(p))
 				mat[p.getRow()][p.getColumn()] = true;
 
-			// Foward 2 blocks
+			// South 2 blocks
 			p.setValues(position.getRow() + 2, position.getColumn());
 			Position p2 = new Position(position.getRow() + 1, position.getColumn());
 			if (getBoard().positionExists(p) && !getBoard().thereIsAPiece(p) && getBoard().positionExists(p2)
 					&& !getBoard().thereIsAPiece(p2) && getMoveCount() == 0)
 				mat[p.getRow()][p.getColumn()] = true;
 
-			// Capture enemy on the right diagonal
+			// Capture enemy on Southwest
 			p.setValues(position.getRow() + 1, position.getColumn() - 1);
 			if (getBoard().positionExists(p) && isThereOpponentPiece(p))
 				mat[p.getRow()][p.getColumn()] = true;
 
-			// Capture enemy on the left diagonal
+			// Capture enemy on Southeast
 			p.setValues(position.getRow() + 1, position.getColumn() + 1);
 			if (getBoard().positionExists(p) && isThereOpponentPiece(p))
 				mat[p.getRow()][p.getColumn()] = true;
