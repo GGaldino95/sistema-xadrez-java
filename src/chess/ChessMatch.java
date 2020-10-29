@@ -1,5 +1,6 @@
 package chess;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,6 +41,7 @@ public class ChessMatch {
 	private boolean check;
 	private boolean checkmate;
 	private ChessPiece enPassantVulnerable;
+	private ChessPiece promoted;
 
 	// Lists
 	private List<Piece> piecesOnTheBoard = new ArrayList<>();
@@ -74,6 +76,10 @@ public class ChessMatch {
 		return enPassantVulnerable;
 	}
 
+	public ChessPiece getPromoted() {
+		return promoted;
+	}
+	
 	// Methods
 	public ChessPiece[][] getPieces() { // 1.4*
 		ChessPiece[][] mat = new ChessPiece[board.getRows()][board.getColumns()];
@@ -106,6 +112,15 @@ public class ChessMatch {
 
 		ChessPiece movedPiece = (ChessPiece) board.piece(target);
 
+		// Promotion (Special move)
+		promoted = null;
+		if (movedPiece instanceof Pawn) {
+			if ((movedPiece.getColor() == Color.WHITE && target.getRow() == 0) || (movedPiece.getColor() == Color.BLACK && target.getRow() == 7)) {
+				promoted = (ChessPiece)board.piece(target); // Downcasting
+				promoted = replacePromotedPiece("Q");
+			}
+		}
+		
 		check = (testCheck(opponent(currentPlayer))) ? true : false;
 
 		if (testCheckmate(opponent(currentPlayer))) {
@@ -124,6 +139,32 @@ public class ChessMatch {
 		return (ChessPiece) capturedPiece; // Downcasting
 	}
 
+	public ChessPiece replacePromotedPiece(String type) {
+		if (promoted == null) 
+			throw new IllegalStateException("There is no piece to be promoted");
+			
+		if (!type.equalsIgnoreCase("B") && !type.equalsIgnoreCase("N") && !type.equalsIgnoreCase("R") && !type.equalsIgnoreCase("Q"))
+			throw new InvalidParameterException("Invalid type of promotion");
+		
+		Position pos = promoted.getChessPosition().toPosition();
+		Piece p = board.removePiece(pos);		
+		piecesOnTheBoard.remove(p);
+		
+		ChessPiece newPiece = newPiece(type, promoted.getColor());
+		board.placePiece(newPiece, pos);
+		piecesOnTheBoard.add(newPiece);
+		
+		return newPiece;
+	}
+	
+	private ChessPiece newPiece(String type, Color color) {
+		if (type.equalsIgnoreCase("B")) return new Bishop(board, color);
+		if (type.equalsIgnoreCase("N")) return new Knight(board, color);
+		if (type.equalsIgnoreCase("Q")) return new Queen(board, color);
+		
+		return new Rook(board, color);
+	}
+	
 	private Piece makeMove(Position source, Position target) {
 		ChessPiece p = (ChessPiece) board.removePiece(source); // Downcasting
 		p.increaseMoveCount();
@@ -309,7 +350,7 @@ public class ChessMatch {
 		placeNewPiece('g', 1, new Knight(board, Color.WHITE));
 		placeNewPiece('h', 1, new Rook(board, Color.WHITE));
 		placeNewPiece('a', 2, new Pawn(board, Color.WHITE, this)); // 1.5*
-		placeNewPiece('b', 2, new Pawn(board, Color.WHITE, this)); // 1.5*
+		placeNewPiece('b', 7, new Pawn(board, Color.WHITE, this)); // 1.5*
 		placeNewPiece('c', 2, new Pawn(board, Color.WHITE, this)); // 1.5*
 		placeNewPiece('d', 2, new Pawn(board, Color.WHITE, this)); // 1.5*
 		placeNewPiece('e', 2, new Pawn(board, Color.WHITE, this)); // 1.5*
@@ -318,7 +359,7 @@ public class ChessMatch {
 		placeNewPiece('h', 2, new Pawn(board, Color.WHITE, this)); // 1.5*
 
 		placeNewPiece('a', 8, new Rook(board, Color.BLACK));
-		placeNewPiece('b', 8, new Knight(board, Color.BLACK));
+		//placeNewPiece('b', 8, new Knight(board, Color.BLACK));
 		placeNewPiece('c', 8, new Bishop(board, Color.BLACK));
 		placeNewPiece('d', 8, new Queen(board, Color.BLACK));
 		placeNewPiece('e', 8, new King(board, Color.BLACK, this)); // 1.5*
@@ -326,7 +367,7 @@ public class ChessMatch {
 		placeNewPiece('g', 8, new Knight(board, Color.BLACK));
 		placeNewPiece('h', 8, new Rook(board, Color.BLACK));
 		placeNewPiece('a', 7, new Pawn(board, Color.BLACK, this)); // 1.5*
-		placeNewPiece('b', 7, new Pawn(board, Color.BLACK, this)); // 1.5*
+		//placeNewPiece('b', 7, new Pawn(board, Color.BLACK, this)); // 1.5*
 		placeNewPiece('c', 7, new Pawn(board, Color.BLACK, this)); // 1.5*
 		placeNewPiece('d', 7, new Pawn(board, Color.BLACK, this)); // 1.5*
 		placeNewPiece('e', 7, new Pawn(board, Color.BLACK, this)); // 1.5*
